@@ -9,6 +9,11 @@ void dfs(int n, int m, int num) {
 	int next_c = m - sub;
 	if (next_c < 1)	next_c = M + next_c;
 	else if (next_c > M)	next_c = next_c - M;
+	
+	int sub1 = nPtr[n] - nPtr[n - 1];//안쪽 원판 인접 
+	int post_c = m - sub1;
+	if (post_c < 1)	post_c = M + post_c;
+	else if (post_c > M)	post_c = post_c - M;
 
 	if (circle[n][ri] == num) {
 		circle[n][ri] = 0, circle[n][m] = 0, b_flg = false;
@@ -21,6 +26,11 @@ void dfs(int n, int m, int num) {
 	if (n < N && circle[n + 1][next_c] == num) {//마지막 원판일때는 실행안함
 		circle[n + 1][next_c] = 0, circle[n][m] = 0, b_flg = false;
 		dfs(n + 1, next_c, num);
+	}
+	
+	if (n > 1 && circle[n - 1][post_c] == num) {//첫번째 원판 실행안함
+		circle[n - 1][post_c] = 0, circle[n][m] = 0, b_flg = false;
+		dfs(n - 1, post_c, num);
 	}
 }
 
@@ -78,7 +88,7 @@ int main() {
 		fu(i);
 	}
 
-	for (int i = 1; i <= N; i++) {//전체 원판 
+	for (int i = 1; i <= N; i++) {//전체 원판 값 
 		for (int j = 1; j <= M; j++) {
 			if (circle[i][j])	res += circle[i][j];
 		}
