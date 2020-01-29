@@ -3,9 +3,9 @@ using namespace std;
 int N, M, T, summ, zeroCnt, tmp, res, nPtr[52], circle[52][52], xdk[52][3];
 bool b_flg;
 void dfs(int n, int m, int num) {
-	int ri = m + 1 > M ? m + 1 - M : m + 1;
-	int le = m - 1 < 1 ? M + (m - 1) : m - 1;
-	int sub = nPtr[n] - nPtr[n + 1];
+	int ri = m + 1 > M ? m + 1 - M : m + 1; //오른쪽 좌표
+	int le = m - 1 < 1 ? M + (m - 1) : m - 1; //왼쪽 좌표
+	int sub = nPtr[n] - nPtr[n + 1]; //바깥쪽 원판 인접 좌표
 	int next_c = m - sub;
 	if (next_c < 1)	next_c = M + next_c;
 	else if (next_c > M)	next_c = next_c - M;
@@ -18,7 +18,7 @@ void dfs(int n, int m, int num) {
 		circle[n][le] = 0, circle[n][m] = 0, b_flg = false;
 		dfs(n, le, num);
 	}
-	if (n < N && circle[n + 1][next_c] == num) {
+	if (n < N && circle[n + 1][next_c] == num) {//마지막 원판일때는 실행안함
 		circle[n + 1][next_c] = 0, circle[n][m] = 0, b_flg = false;
 		dfs(n + 1, next_c, num);
 	}
@@ -26,7 +26,7 @@ void dfs(int n, int m, int num) {
 
 void fu(int Tcnt) {
 	int n_cnt = xdk[Tcnt][0], dir = xdk[Tcnt][1], rotcnt = xdk[Tcnt][2];
-	for (int i = n_cnt; i <= N; i += n_cnt) {
+	for (int i = n_cnt; i <= N; i += n_cnt) {//스타트 포인터 조정
 		if (dir) {
 			nPtr[i] += rotcnt;
 			if (nPtr[i] > M)	nPtr[i] = nPtr[i] % M > 0 ? nPtr[i] % M : M;
@@ -37,14 +37,14 @@ void fu(int Tcnt) {
 		}
 	}
 
-	b_flg = true;
+	b_flg = true;//원판 숫자 삭제여부 확인
 	for (int i = 1; i <= N; i++) {
 		for (int j = 1; j <= M; j++)
 			if (circle[i][j]) 	dfs(i, j, circle[i][j]);
 	}
 
 	summ = 0, zeroCnt = M * N;
-	if (b_flg) {
+	if (b_flg) {//평균계산 및 조정
 		for (int i = 1; i <= N; i++) {
 			for (int j = 1; j <= M; j++) {
 				if (circle[i][j])	summ += circle[i][j];
@@ -78,7 +78,7 @@ int main() {
 		fu(i);
 	}
 
-	for (int i = 1; i <= N; i++) {
+	for (int i = 1; i <= N; i++) {//전체 원판 
 		for (int j = 1; j <= M; j++) {
 			if (circle[i][j])	res += circle[i][j];
 		}
