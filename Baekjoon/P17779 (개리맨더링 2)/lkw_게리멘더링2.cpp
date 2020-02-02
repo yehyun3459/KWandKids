@@ -1,8 +1,8 @@
 #include<iostream>
 using namespace std;
 
-int map[21][21];
-int idx[21][21];
+int map[21][21]; // 인구 수를 저장하는 배열
+int idx[21][21]; // 구역 번호를 저장하는 
 int N;
 
 void setWard(int r, int c, int d1, int d2) { // 기준점과 두 길이를 입력받아 구역을 나눠주는 함수
