@@ -9,14 +9,14 @@ int main() {
 	cin >> R >> C >> M;
 	for (int i = 1; i <= M; i++) {
 		for (int j = 0; j < 5; j++)
-			cin >> shark[i][j]; // y,x,¼Ó·Â, ÀÌµ¿¹æÇâ, Å©±â
-		AA[shark[i][0]][shark[i][1]] = i;//»ó¾î À§Ä¡ ÁÂÇ¥ ÀÎµ¦½º·Î Ç¥½Ã
+			cin >> shark[i][j]; // y,x,ì†ë ¥, ì´ë™ë°©í–¥, í¬ê¸°
+		AA[shark[i][0]][shark[i][1]] = i;//ìƒì–´ ìœ„ì¹˜ ì¢Œí‘œ ì¸ë±ìŠ¤ë¡œ í‘œì‹œ
 	}
 
 	for (int cnt = 1; cnt <= C; cnt++) {
 		int minn = 101, idx = 0;
 		for (int j = 1; j <= M; j++) {
-			if (shark[j][1] == cnt) {//ÇöÀç ³¬½Ã¿Õ À§Ä¡Áß ÃÖ¼Ò y°ª ±¸ÇÏ±â
+			if (shark[j][1] == cnt) {//í˜„ì¬ ë‚šì‹œì™• ìœ„ì¹˜ì¤‘ ìµœì†Œ yê°’ êµ¬í•˜ê¸°
 				if (minn > shark[j][0]) {
 					minn = shark[j][0];
 					idx = j;
@@ -25,16 +25,17 @@ int main() {
 		}
 
 		if (minn < 101) {
-			shark[idx][0] = 0; //ÀâÀº »ó¾î x, y°ª 0À¸·Î Ç¥½Ã
+			AA[shark[idx][0]][shark[idx][1]] = 0; //ì¡ ìƒì–´ ë§µì—ì„œ ì œê±°
+			shark[idx][0] = 0; //ì¡ì€ ìƒì–´ x, yê°’ 0ìœ¼ë¡œ í‘œì‹œ
 			shark[idx][1] = 0;
-			res += shark[idx][4]; //ÀâÀº »ó¾î Å©±â Ãß°¡
+			res += shark[idx][4]; //ì¡ì€ ìƒì–´ í¬ê¸° ì¶”ê°€
 		}
 
 		for (int i = 1; i <= M; i++) {
 			int tmp_y = shark[i][0], tmp_x = shark[i][1];
-			if (!tmp_y)	continue; //Àâ°Å³ª Á×Àº »ó¾îÀÏ°æ¿ì ³Ñ±â±â
-			AA[tmp_y][tmp_x] = 0; //ÇöÀç »ó¾î À§Ä¡ ÀÓ½Ã·Î ¾ø¾Ú
-			if (shark[i][3] == 1) { //À§·Î ¿òÁ÷ÀÏ¶§
+			if (!tmp_y)	continue; //ì¡ê±°ë‚˜ ì£½ì€ ìƒì–´ì¼ê²½ìš° ë„˜ê¸°ê¸°
+			AA[tmp_y][tmp_x] = 0; //í˜„ì¬ ìƒì–´ ìœ„ì¹˜ ì„ì‹œë¡œ ì—†ì•°
+			if (shark[i][3] == 1) { //ìœ„ë¡œ ì›€ì§ì¼ë•Œ
 				shark[i][0] += (move_y[shark[i][3]] * shark[i][2]);
 				if (shark[i][0] < 1) {
 					shark[i][0]--;
@@ -42,17 +43,17 @@ int main() {
 					int tmp_mod = abs(shark[i][0]) % (R - 1);
 					if (tmp_div & 1) {
 						shark[i][0] = R - tmp_mod;
-						if (!tmp_mod) //¸¶Áö¸· Ä­¿¡ ÀÖ´Â °æ¿ì ¹æÇâÀÌ ´Ù¸§
+						if (!tmp_mod) //ë§ˆì§€ë§‰ ì¹¸ì— ìˆëŠ” ê²½ìš° ë°©í–¥ì´ ë‹¤ë¦„
 							shark[i][3] = 2;
 					}
 					else {
 						shark[i][0] = 1 + tmp_mod;
-						if (tmp_mod) //Ã¹¹øÂ° Ä­¿¡ ÀÖ´Â °æ¿ì ¹æÇâÀÌ ´Ù¸§
+						if (tmp_mod) //ì²«ë²ˆì§¸ ì¹¸ì— ìˆëŠ” ê²½ìš° ë°©í–¥ì´ ë‹¤ë¦„
 							shark[i][3] = 2;
 					}
 				}
 			}
-			else if (shark[i][3] == 2) {//¾Æ·¡·Î ¿òÁ÷ÀÏ¶§
+			else if (shark[i][3] == 2) {//ì•„ë˜ë¡œ ì›€ì§ì¼ë•Œ
 				shark[i][0] += (move_y[shark[i][3]] * shark[i][2]);
 				if (shark[i][0] > R) {
 					shark[i][0] -= R;
@@ -72,7 +73,7 @@ int main() {
 
 				}
 			}
-			else if (shark[i][3] == 3) { //¿À¸¥ÂÊÀ¸·Î ¿òÁ÷ÀÏ¶§
+			else if (shark[i][3] == 3) { //ì˜¤ë¥¸ìª½ìœ¼ë¡œ ì›€ì§ì¼ë•Œ
 				shark[i][1] += (move_x[shark[i][3]] * shark[i][2]);
 				if (shark[i][1] > C) {
 					shark[i][1] -= C;
@@ -91,7 +92,7 @@ int main() {
 
 				}
 			}
-			else if (shark[i][3] == 4) {//¿ŞÂÊÀ¸·Î ¿òÁ÷ÀÏ¶§
+			else if (shark[i][3] == 4) {//ì™¼ìª½ìœ¼ë¡œ ì›€ì§ì¼ë•Œ
 				shark[i][1] += (move_x[shark[i][3]] * shark[i][2]);
 				if (shark[i][1] < 1) {
 					shark[i][1]--;
@@ -111,9 +112,9 @@ int main() {
 				}
 			}
 
-			if (AA[shark[i][0]][shark[i][1]] < i) { //ÀÌµ¿ÇÑ À§Ä¡¿¡ ÀÌ¹Ì ÀÌµ¿ÇÑ »ó¾î ÀÖ´ÂÁö È®ÀÎ
+			if (AA[shark[i][0]][shark[i][1]] < i) { //ì´ë™í•œ ìœ„ì¹˜ì— ì´ë¯¸ ì´ë™í•œ ìƒì–´ ìˆëŠ”ì§€ í™•ì¸
 				int tmp_idx = AA[shark[i][0]][shark[i][1]];
-				if (shark[tmp_idx][4] > shark[i][4]) {//Å©±â ºñ±³ÈÄ Á×Àº»ó¾î ÁÂÇ¥ 0À¸·Î ¼³Á¤
+				if (shark[tmp_idx][4] > shark[i][4]) {//í¬ê¸° ë¹„êµí›„ ì£½ì€ìƒì–´ ì¢Œí‘œ 0ìœ¼ë¡œ ì„¤ì •
 					shark[i][0] = 0;
 					shark[i][1] = 0;
 				}
