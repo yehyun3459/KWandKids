@@ -80,6 +80,8 @@ int main() {
 		}
 		printf("\n\n");
 		*/
+		cnt = cheeze_num;
+
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
 				if (map[i][j] == 1) {
@@ -94,7 +96,10 @@ int main() {
 				if(map[i][j]==1) temp++;
 			}
 		}
+		
 		cheeze_num = temp;
+
+		
 
 		/*
 		for (int i = 0; i < n; i++) {
