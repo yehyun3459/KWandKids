@@ -9,65 +9,56 @@ int main() {
 	scanf(" %d %d %d", &N, &M, &K);
 	for (int i = 1; i <= N; i++)
 		for (int j = 1; j <= N; j++) {
-			scanf(" %d", &Add[i][j]); //¸Å³â Ãß°¡µÇ´Â ¾çºĞ°ª
-			land[i][j] = 5; //ÅäÁö ÀúÀåµÇÀÖ´Â ¾çºĞ°ª
+			scanf(" %d", &Add[i][j]); //ë§¤ë…„ ì¶”ê°€ë˜ëŠ” ì–‘ë¶„ê°’
+			land[i][j] = 5; //í† ì§€ ì €ì¥ë˜ìˆëŠ” ì–‘ë¶„ê°’
 		}
-	totcnt = M; //ÀüÃ¼ ½É¾îÁ®ÀÖ´Â ³ª¹« ¼ö
+	totcnt = M; //ì „ì²´ ì‹¬ì–´ì ¸ìˆëŠ” ë‚˜ë¬´ ìˆ˜
 	int y, x, z;
 	for (int i = 0; i < M; i++) {
 		scanf(" %d %d %d", &y, &x, &z);
-		v[y][x].push_back(z);//ÁÂÇ¥ º° ³ª¹«³ªÀÌ ÀúÀå
+		v[y][x].push_back(z);//ì¢Œí‘œ ë³„ ë‚˜ë¬´ë‚˜ì´ ì €ì¥
 	}
-
+	//////////////////////////////////////////////////////
 	for (int i = 1; i <= N; i++)
 		for (int j = 1; j <= N; j++)
-			sort(v[i][j].begin(), v[i][j].end()); //ÁÂÇ¥ º° ¿À¸§Â÷¼øÀ¸·Î Á¤·Ä, ¾î¸° ³ª¹« ¿ì¼±
+			sort(v[i][j].begin(), v[i][j].end()); //ì¢Œí‘œ ë³„ ì˜¤ë¦„ì°¨ìˆœìœ¼ë¡œ ì •ë ¬, ì–´ë¦° ë‚˜ë¬´ ìš°ì„ 
+	
 	for (int year = 1; year <= K; year++) {
-		//º½
-		for (int i = 1; i <= N; i++) {
+		//ë´„
+		for (int i = 1; i <= N; i++) 
 			for (int j = 1; j <= N; j++) {
 				tmp = 0, ed = v[i][j].size();
 				for (int cnt = 0; cnt < ed; cnt++) {
-					if (land[i][j] < v[i][j][cnt]) { //ÅäÁö ¾çºĞ°ú ³ª¹« ³ªÀÌ ºñ±³
+					if (land[i][j] < v[i][j][cnt]) { //í† ì§€ ì–‘ë¶„ê³¼ ë‚˜ë¬´ ë‚˜ì´ ë¹„êµ
 
 						for (int kk = ed - 1; kk >= cnt; kk--) {
-							tmp += v[i][j][kk] / 2; //³ª¹«°¡ ´õ Å¬ °æ¿ì µŞ ¹è¿­ ÀüºÎ ÀÓ½Ã ÀúÀå ¹× pop
+							tmp += v[i][j][kk] / 2; //ë‚˜ë¬´ê°€ ë” í´ ê²½ìš° ë’· ë°°ì—´ ì „ë¶€ ì„ì‹œ ì €ì¥ ë° pop
 							v[i][j].pop_back();
 						}
-						totcnt -= ed - cnt; //Á×Àº ³ª¹« ¸¸Å­ Ä«¿îÆ® ´Ù¿î
+						totcnt -= ed - cnt; //ì£½ì€ ë‚˜ë¬´ ë§Œí¼ ì¹´ìš´íŠ¸ ë‹¤ìš´
 						break;
 					}
 					else {
-						land[i][j] -= v[i][j][cnt]; //ÅäÁö ¾çºĞÀÌ ´õ ¸¹À» °æ¿ì ³ª¹« ³ªÀÌ¸¸Å­ Â÷°¨
+						land[i][j] -= v[i][j][cnt]; //í† ì§€ ì–‘ë¶„ì´ ë” ë§ì„ ê²½ìš° ë‚˜ë¬´ ë‚˜ì´ë§Œí¼ ì°¨ê°
 						v[i][j][cnt]++; 
 					}
 				}
-				land[i][j] += tmp; //¿©¸§ ,  Á×Àº ³ª¹« ÀÓ½ÃÀúÀå °ª ÅäÁö¿¡ Ãß°¡
+				land[i][j] += tmp; //ì—¬ë¦„ ,  ì£½ì€ ë‚˜ë¬´ ì„ì‹œì €ì¥ ê°’ í† ì§€ì— ì¶”ê°€
 			}
-		}
-
-		//°¡À» + °Ü¿ï
+		//ê°€ì„ + ê²¨ìš¸
 		for (int i = 1; i <= N; i++) {
 			for (int j = 1; j <= N; j++) {
 				land[i][j] += Add[i][j];
 				tmp = v[i][j].size();
 				for (int cnt = 0; cnt < tmp; cnt++) {
 					if (!(v[i][j][cnt] % 5)) {
-						for (int k = 0; k < 8; k++) { //ÁÖº¯ 8°³ ÁÂÇ¥ È®ÀÎ
+						for (int k = 0; k < 8; k++) { //ì£¼ë³€ 8ê°œ ì¢Œí‘œ í™•ì¸
 							int tmp_y = i + move_y[k];
 							int tmp_x = j + move_x[k];
 							if (tmp_y > 0 && tmp_y <= N && tmp_x > 0 && tmp_x <= N) {
-								v[tmp_y][tmp_x].push_front(1); // 1À» Á© ¾ÕÀ¸·Î »ğÀÔ
-								totcnt++; //Ä«¿îÆ® Ãß°¡
-							}
-						}
-					}
-				}
-			}
-		}
-
-	}
-
+								v[tmp_y][tmp_x].push_front(1); // 1ì„ ì ¤ ì•ìœ¼ë¡œ ì‚½ì…
+								totcnt++; //ì¹´ìš´íŠ¸ ì¶”ê°€
+							}}}}}}}
 	printf("%d", totcnt);
 	return 0;
 }
