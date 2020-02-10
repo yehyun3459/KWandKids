@@ -4,11 +4,10 @@ using namespace std;
 
 int T;
 int ROT;
-int dR[4] = { 0, 1, 0, -1 };
-int dC[4] = { 1, 0, -1, 0 };
+int circle[8][2] = { {0, 0}, {0, 1}, {0, 2}, {1, 2}, {2, 2}, {2, 1}, {2, 0}, {1, 0} };
 int U[4][3][3] = { {{4, 0, 0}, {4, 0, 1}, {4, 0, 2}},
 					{{3, 0, 0}, {3, 0, 1}, {3, 0, 2}},
-					{{5, 0, 0}, {5, 0, 1}, {5, 0, 2}}, 
+					{{5, 0, 0}, {5, 0, 1}, {5, 0, 2}},
 					{{1, 0, 0}, {1, 0, 1}, {1, 0, 2}} };
 int D[4][3][3] = { {{4, 2, 0}, {4, 2, 1}, {4, 2, 2}},
 					{{1, 2, 0}, {1, 2, 1}, {1, 2, 2}},
@@ -40,8 +39,6 @@ int isMap(int r, int c)
 
 void rotate(char plat, char dir)
 {
-	int d = 0;
-	int r=0, c=0, rr=0, cc=0;
 	if (dir == '+')
 	{
 		if (plat == 'U')
@@ -55,18 +52,12 @@ void rotate(char plat, char dir)
 			cube[U[0][0][0]][U[0][0][1]][U[0][0][2]] = tmp[0];
 			cube[U[0][1][0]][U[0][1][1]][U[0][1][2]] = tmp[1];
 			cube[U[0][2][0]][U[0][2][1]][U[0][2][2]] = tmp[2];
-			int p = 0; tmp[0] = cube[p][0][0];
-			while (d < 4)
-			{
-				rr = r + dR[d]; cc = c + dC[d];
-				if (d == 3 && rr==0)
-					cube[p][1][0] = tmp[0];
-				else if (!isMap(rr, cc))
-					d++;
-				else
-					cube[p][r][c] = cube[p][rr][cc];
-			}
-			
+			int p = 0; tmp[0] = cube[p][circle[8][0]][circle[8][1]]; tmp[1] = cube[p][circle[7][0]][circle[7][1]];
+			for (int i = 8; i > 1; i--)
+				cube[p][circle[i][0]][circle[i][1]] = cube[p][circle[i - 2][0]][circle[i - 2][1]];
+			cube[p][circle[0][0]][circle[0][1]] = tmp[1];
+			cube[p][circle[1][0]][circle[1][1]] = tmp[0];
+
 		}
 		else if (plat == 'D')
 		{
@@ -79,17 +70,11 @@ void rotate(char plat, char dir)
 			cube[D[0][0][0]][D[0][0][1]][D[0][0][2]] = tmp[0];
 			cube[D[0][1][0]][D[0][1][1]][D[0][1][2]] = tmp[1];
 			cube[D[0][2][0]][D[0][2][1]][D[0][2][2]] = tmp[2];
-			int p = 2; tmp[0] = cube[p][0][0];
-			while (d < 4)
-			{
-				rr = r + dR[d]; cc = c + dC[d];
-				if (d == 3 && rr == 0)
-					cube[p][1][0] = tmp[0];
-				else if (!isMap(rr, cc))
-					d++;
-				else
-					cube[p][r][c] = cube[p][rr][cc];
-			}
+			int p = 2; tmp[0] = cube[p][circle[8][0]][circle[8][1]]; tmp[1] = cube[p][circle[7][0]][circle[7][1]];
+			for (int i = 8; i > 1; i--)
+				cube[p][circle[i][0]][circle[i][1]] = cube[p][circle[i - 2][0]][circle[i - 2][1]];
+			cube[p][circle[0][0]][circle[0][1]] = tmp[1];
+			cube[p][circle[1][0]][circle[1][1]] = tmp[0];
 		}
 		else if (plat == 'F')
 		{
@@ -102,17 +87,11 @@ void rotate(char plat, char dir)
 			cube[F[0][0][0]][F[0][0][1]][F[0][0][2]] = tmp[0];
 			cube[F[0][1][0]][F[0][1][1]][F[0][1][2]] = tmp[1];
 			cube[F[0][2][0]][F[0][2][1]][F[0][2][2]] = tmp[2];
-			int p = 1; tmp[0] = cube[p][0][0];
-			while (d < 4)
-			{
-				rr = r + dR[d]; cc = c + dC[d];
-				if (d == 3 && rr == 0)
-					cube[p][1][0] = tmp[0];
-				else if (!isMap(rr, cc))
-					d++;
-				else
-					cube[p][r][c] = cube[p][rr][cc];
-			}
+			int p = 1; tmp[0] = cube[p][circle[8][0]][circle[8][1]]; tmp[1] = cube[p][circle[7][0]][circle[7][1]];
+			for (int i = 8; i > 1; i--)
+				cube[p][circle[i][0]][circle[i][1]] = cube[p][circle[i - 2][0]][circle[i - 2][1]];
+			cube[p][circle[0][0]][circle[0][1]] = tmp[1];
+			cube[p][circle[1][0]][circle[1][1]] = tmp[0];
 		}
 		else if (plat == 'B')
 		{
@@ -125,17 +104,11 @@ void rotate(char plat, char dir)
 			cube[B[0][0][0]][B[0][0][1]][B[0][0][2]] = tmp[0];
 			cube[B[0][1][0]][B[0][1][1]][B[0][1][2]] = tmp[1];
 			cube[B[0][2][0]][B[0][2][1]][B[0][2][2]] = tmp[2];
-			int p = 3; tmp[0] = cube[p][0][0];
-			while (d < 4)
-			{
-				rr = r + dR[d]; cc = c + dC[d];
-				if (d == 3 && rr == 0)
-					cube[p][1][0] = tmp[0];
-				else if (!isMap(rr, cc))
-					d++;
-				else
-					cube[p][r][c] = cube[p][rr][cc];
-			}
+			int p = 3; tmp[0] = cube[p][circle[8][0]][circle[8][1]]; tmp[1] = cube[p][circle[7][0]][circle[7][1]];
+			for (int i = 8; i > 1; i--)
+				cube[p][circle[i][0]][circle[i][1]] = cube[p][circle[i - 2][0]][circle[i - 2][1]];
+			cube[p][circle[0][0]][circle[0][1]] = tmp[1];
+			cube[p][circle[1][0]][circle[1][1]] = tmp[0];
 		}
 		else if (plat == 'L')
 		{
@@ -148,17 +121,11 @@ void rotate(char plat, char dir)
 			cube[L[0][0][0]][L[0][0][1]][L[0][0][2]] = tmp[0];
 			cube[L[0][1][0]][L[0][1][1]][L[0][1][2]] = tmp[1];
 			cube[L[0][2][0]][L[0][2][1]][L[0][2][2]] = tmp[2];
-			int p = 4; tmp[0] = cube[p][0][0];
-			while (d < 4)
-			{
-				rr = r + dR[d]; cc = c + dC[d];
-				if (d == 3 && rr == 0)
-					cube[p][1][0] = tmp[0];
-				else if (!isMap(rr, cc))
-					d++;
-				else
-					cube[p][r][c] = cube[p][rr][cc];
-			}
+			int p = 4; tmp[0] = cube[p][circle[8][0]][circle[8][1]]; tmp[1] = cube[p][circle[7][0]][circle[7][1]];
+			for (int i = 8; i > 1; i--)
+				cube[p][circle[i][0]][circle[i][1]] = cube[p][circle[i - 2][0]][circle[i - 2][1]];
+			cube[p][circle[0][0]][circle[0][1]] = tmp[1];
+			cube[p][circle[1][0]][circle[1][1]] = tmp[0];
 		}
 		else if (plat == 'R')
 		{
@@ -171,17 +138,11 @@ void rotate(char plat, char dir)
 			cube[R[0][0][0]][R[0][0][1]][R[0][0][2]] = tmp[0];
 			cube[R[0][1][0]][R[0][1][1]][R[0][1][2]] = tmp[1];
 			cube[R[0][2][0]][R[0][2][1]][R[0][2][2]] = tmp[2];
-			int p = 5; tmp[0] = cube[p][0][0];
-			while (d < 4)
-			{
-				rr = r + dR[d]; cc = c + dC[d];
-				if (d == 3 && rr == 0)
-					cube[p][1][0] = tmp[0];
-				else if (!isMap(rr, cc))
-					d++;
-				else
-					cube[p][r][c] = cube[p][rr][cc];
-			}
+			int p = 5; tmp[0] = cube[p][circle[8][0]][circle[8][1]]; tmp[1] = cube[p][circle[7][0]][circle[7][1]];
+			for (int i = 8; i > 1; i--)
+				cube[p][circle[i][0]][circle[i][1]] = cube[p][circle[i - 2][0]][circle[i - 2][1]];
+			cube[p][circle[0][0]][circle[0][1]] = tmp[1];
+			cube[p][circle[1][0]][circle[1][1]] = tmp[0];
 		}
 	}
 	else
@@ -193,10 +154,17 @@ void rotate(char plat, char dir)
 			tmp[2] = cube[U[0][2][0]][U[0][2][1]][U[0][2][2]];
 			for (int i = 0; i < 3; i++)
 				for (int j = 0; j < 3; j++)
-					cube[U[i][j][0]][U[i][j][1]][U[i][j][2]] = cube[U[i+1][j][0]][U[i+1][j][1]][U[i+1][j][2]];
+					cube[U[i][j][0]][U[i][j][1]][U[i][j][2]] = cube[U[i + 1][j][0]][U[i + 1][j][1]][U[i + 1][j][2]];
 			cube[U[3][0][0]][U[3][0][1]][U[3][0][2]] = tmp[0];
 			cube[U[3][1][0]][U[3][1][1]][U[3][1][2]] = tmp[1];
 			cube[U[3][2][0]][U[3][2][1]][U[3][2][2]] = tmp[2];
+			int p = 0; tmp[0] = cube[p][circle[0][0]][circle[0][1]]; tmp[1] = cube[p][circle[1][0]][circle[1][1]];
+			for (int i = 0; i < 7; i++)
+			{
+				cube[p][circle[i][0]][circle[i][1]] = cube[p][circle[i + 2][0]][circle[i + 2][1]];
+			}
+			cube[p][circle[8][0]][circle[8][1]] = tmp[1];
+			cube[p][circle[7][0]][circle[7][1]] = tmp[0];
 		}
 		else if (plat == 'D')
 		{
@@ -209,6 +177,13 @@ void rotate(char plat, char dir)
 			cube[D[3][0][0]][D[3][0][1]][D[3][0][2]] = tmp[0];
 			cube[D[3][1][0]][D[3][1][1]][D[3][1][2]] = tmp[1];
 			cube[D[3][2][0]][D[3][2][1]][D[3][2][2]] = tmp[2];
+			int p = 2; tmp[0] = cube[p][circle[0][0]][circle[0][1]]; tmp[1] = cube[p][circle[1][0]][circle[1][1]];
+			for (int i = 0; i < 7; i++)
+			{
+				cube[p][circle[i][0]][circle[i][1]] = cube[p][circle[i + 2][0]][circle[i + 2][1]];
+			}
+			cube[p][circle[8][0]][circle[8][1]] = tmp[1];
+			cube[p][circle[7][0]][circle[7][1]] = tmp[0];
 		}
 		else if (plat == 'F')
 		{
@@ -221,6 +196,13 @@ void rotate(char plat, char dir)
 			cube[F[3][0][0]][F[3][0][1]][F[3][0][2]] = tmp[0];
 			cube[F[3][1][0]][F[3][1][1]][F[3][1][2]] = tmp[1];
 			cube[F[3][2][0]][F[3][2][1]][F[3][2][2]] = tmp[2];
+			int p = 1; tmp[0] = cube[p][circle[0][0]][circle[0][1]]; tmp[1] = cube[p][circle[1][0]][circle[1][1]];
+			for (int i = 0; i < 7; i++)
+			{
+				cube[p][circle[i][0]][circle[i][1]] = cube[p][circle[i + 2][0]][circle[i + 2][1]];
+			}
+			cube[p][circle[8][0]][circle[8][1]] = tmp[1];
+			cube[p][circle[7][0]][circle[7][1]] = tmp[0];
 		}
 		else if (plat == 'B')
 		{
@@ -233,6 +215,13 @@ void rotate(char plat, char dir)
 			cube[B[3][0][0]][B[3][0][1]][B[3][0][2]] = tmp[0];
 			cube[B[3][1][0]][B[3][1][1]][B[3][1][2]] = tmp[1];
 			cube[B[3][2][0]][B[3][2][1]][B[3][2][2]] = tmp[2];
+			int p = 3; tmp[0] = cube[p][circle[0][0]][circle[0][1]]; tmp[1] = cube[p][circle[1][0]][circle[1][1]];
+			for (int i = 0; i < 7; i++)
+			{
+				cube[p][circle[i][0]][circle[i][1]] = cube[p][circle[i + 2][0]][circle[i + 2][1]];
+			}
+			cube[p][circle[8][0]][circle[8][1]] = tmp[1];
+			cube[p][circle[7][0]][circle[7][1]] = tmp[0];
 		}
 		else if (plat == 'L')
 		{
@@ -245,6 +234,13 @@ void rotate(char plat, char dir)
 			cube[L[3][0][0]][L[3][0][1]][L[3][0][2]] = tmp[0];
 			cube[L[3][1][0]][L[3][1][1]][L[3][1][2]] = tmp[1];
 			cube[L[3][2][0]][L[3][2][1]][L[3][2][2]] = tmp[2];
+			int p =4; tmp[0] = cube[p][circle[0][0]][circle[0][1]]; tmp[1] = cube[p][circle[1][0]][circle[1][1]];
+			for (int i = 0; i < 7; i++)
+			{
+				cube[p][circle[i][0]][circle[i][1]] = cube[p][circle[i + 2][0]][circle[i + 2][1]];
+			}
+			cube[p][circle[8][0]][circle[8][1]] = tmp[1];
+			cube[p][circle[7][0]][circle[7][1]] = tmp[0];
 		}
 		else if (plat == 'R')
 		{
@@ -257,13 +253,20 @@ void rotate(char plat, char dir)
 			cube[R[3][0][0]][R[3][0][1]][R[3][0][2]] = tmp[0];
 			cube[R[3][1][0]][R[3][1][1]][R[3][1][2]] = tmp[1];
 			cube[R[3][2][0]][R[3][2][1]][R[3][2][2]] = tmp[2];
+			int p = 5; tmp[0] = cube[p][circle[0][0]][circle[0][1]]; tmp[1] = cube[p][circle[1][0]][circle[1][1]];
+			for (int i = 0; i < 7; i++)
+			{
+				cube[p][circle[i][0]][circle[i][1]] = cube[p][circle[i + 2][0]][circle[i + 2][1]];
+			}
+			cube[p][circle[8][0]][circle[8][1]] = tmp[1];
+			cube[p][circle[7][0]][circle[7][1]] = tmp[0];
 		}
 	}
 }
 
 int main()
 {
-	
+
 	scanf("%d", &T);
 	for (int t_case = 0; t_case < T; t_case++)
 	{
