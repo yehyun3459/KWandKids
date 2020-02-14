@@ -1,0 +1,98 @@
+#include<stdio.h>
+#include<cmath>
+#include<cstring>
+#include<iostream>
+#include<queue>
+#include<algorithm>
+
+using namespace std;
+
+typedef struct
+{
+	int x; int y; int d;
+}castle;
+
+struct cmp {
+	bool operator() (castle a, castle b) {
+		if (a.d == b.d) return a.y > b.y;
+		else return a.d > b.d;
+	}
+};
+
+int map[17][17];
+int n, m, d;
+int archer[3];
+int ans, cnt;
+
+void kill() {
+	int map2[17][17]; 
+	int round = n; cnt = 0;
+	memcpy(map2, map, sizeof(map));
+
+	while (round--) {
+		vector <castle> v;
+		for (int k = 0; k < 3; k++) {
+			priority_queue<castle,vector<castle>,cmp> q;
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < m; j++) {
+					if (map2[i][j] == 1) {
+						int dist = abs(n - i) + abs(archer[k] - j);
+						if (dist <= d) {
+							q.push({ i,j,dist });
+						}
+					}
+				}
+			}
+			if (q.size()) {
+				int x = q.top().x;
+				int y = q.top().y;
+				v.push_back({ x, y });
+			}
+		}	
+
+		for (int i = 0; i < v.size(); i++) {
+			int x = v[i].x;
+			int y = v[i].y;
+			if (map2[x][y]) {
+				map2[x][y] = 0;
+				cnt += 1;
+			}
+		}
+
+		for (int i = n - 2; i >= 0; i--) {
+			for (int j = 0; j < m; j++) {
+				map2[i + 1][j] = map2[i][j];
+			}
+		}
+		for (int i = 0; i < m; i++) {
+			map2[0][i] = 0;
+		}
+	}
+
+	if (ans < cnt) {
+		ans = cnt;
+	}
+}
+
+int main() {
+	scanf("%d %d %d", &n, &m, &d);
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			scanf("%d", &map[i][j]);
+		}
+	}
+
+	for (int i = 0; i < m - 2; i++) {
+		for (int j = i + 1; j < m - 1; j++) {
+			for (int k = j + 1; k < m; k++) {
+				archer[0] = i; archer[1] = j; archer[2] = k;
+				kill();
+			}
+		}
+	}
+
+	printf("%d\n", ans);
+	//system("pause");
+	return 0;
+}
