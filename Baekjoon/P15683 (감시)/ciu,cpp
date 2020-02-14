@@ -1,0 +1,89 @@
+#include <cstdio>
+#include <cstring>
+
+using namespace std;
+
+int N, M;
+int map[8][8]; //기본 맵
+char newMap[8][8]; //사각지대를 검사할 맵
+int cctvr[8]; //cctv들의 행 위치 담는 배열
+int cctvc[8]; //cctv들의 열 위치 담는 배열
+int cctvdir[8]; //cctv들의 방향을 담을 배열
+int dR[4] = { -1, 0, 1, 0 };
+int dC[4] = { 0, 1, 0, -1 };
+int tvstat[5][5] = { {1, 1},{2, 1, 3}, {2, 0, 1}, {3, 0, 1, 3}, {4, 0, 1, 2, 3} }; //cctv 종류에 따른 감시가능 방향
+int cctv_cnt; //cctv 개수
+int min_area = 0; //최소 사각지대
+
+//사각지대 조사
+int draw_map()
+{
+	int area = 0;
+	int cate; //cctv 종류
+	for (int i = 0; i < cctv_cnt; i++) //각 cctv 들에 대해
+	{
+		cate = map[cctvr[i]][cctvc[i]]-1; //cctv 종류 가져옴
+		for (int j = 1; j <= tvstat[cate][0]; j++) //cctv 종류에 따른 감시 방향 개수 까지
+		{
+			//각 방향에 대해 한칸씩 나아가며 사각지대 조사
+
+			int r = cctvr[i], c = cctvc[i], rr, cc;
+			newMap[r][c] = 1;
+			while (map[r][c] < 6)
+			{
+				rr = r + dR[(tvstat[cate][j] + cctvdir[i]) % 4]; cc = c + dC[(tvstat[cate][j] + cctvdir[i]) % 4];
+				if (0 > rr || rr >= N || 0 > cc || cc >= M || map[rr][cc] > 5) break; //벽이나 맵 바깥이면 해당 방향에 대한 조사 끝
+				r = rr; c = cc;
+				newMap[r][c] = 1; //cctv 나 빈 칸이면 해당 지역 감시함을 표시
+			}
+		}			
+	}
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < M; j++)
+			if (!newMap[i][j]&&map[i][j]<6) //감시되지 않고 있고 벽이 아니면 사각지대+1
+				area++;
+	}
+	return area;
+}
+
+//cctv_cnt개의 cctv 방향 만들기
+void permu(int n, int k)
+{
+	if (n == k)
+	{
+		memset(newMap, 0, sizeof(newMap));
+		int area = draw_map();
+		if (area < min_area)
+			min_area = area;
+	}
+	else
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			cctvdir[k] = i;
+			permu(n, k + 1);
+			cctvdir[k] = 0;
+		}
+	}
+}
+
+int main()
+{
+	scanf("%d %d", &N, &M);
+	cctv_cnt = 0;
+	min_area = N * M;
+	for(int i=0; i<N; i++)
+		for (int j = 0; j < M; j++)
+		{
+			scanf("%d", &map[i][j]);
+			if (0 < map[i][j] && map[i][j] < 6)
+			{
+				cctvr[cctv_cnt] = i;
+				cctvc[cctv_cnt] = j;
+				cctv_cnt++;
+			}
+		}
+	permu(cctv_cnt, 0);
+	printf("%d", min_area);
+}
